@@ -4,7 +4,9 @@ import {
   Text,
   View,
   TextInput,
-  Button
+  Alert,
+  Button,
+  BackHandler
 } from 'react-native';
 import axios from 'axios'
 import AsyncStorage from '@react-native-community/async-storage'
@@ -29,6 +31,21 @@ export class Login extends React.Component {
     });
   };
 
+  //This is the first page that users see after login. To prevent logged in users from
+  //going back to login screen, the back button of the device has been disabled only for this
+  //screen.
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  handleBackButton() {
+    return true;
+  }
+
   //No. 01
   //This function is called when "Login" button is pressed.There is a route '/authenticate'
   //in the backend which handles login using email and password. Axios library provides a
@@ -42,7 +59,7 @@ export class Login extends React.Component {
       if(res.data.token){
         this.setToken(res.data.token)
       }
-    })
+    }).catch(err => Alert.alert("Login failed"))
   }
 
   render() {
