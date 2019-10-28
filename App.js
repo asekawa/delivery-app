@@ -1,50 +1,45 @@
 import React from "react";
-import { Button,View, Text } from "react-native";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-import {Login} from "./LogIn"
-import {Orders} from "./Orders"
-import {OrderDetails} from "./OrderDetails"
+import {Login} from "./screens/LogIn"
+import {Orders} from "./screens/Orders"
+import CheckAuth from './util/CheckAuth'
+import {OrderDetails} from "./screens/OrderDetails"
+import axios from 'axios'
 
-/* class HomeScreen extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>user na</Text>
-        <Button
-          title="submit"
-          onPress={() => this.props.navigation.navigate('Details')}
-        />
-      </View>
-    );
-  }
-}
- */
-/* class DetailsScreen extends React.Component {
-  static navigationOption={
-    header:null
-}
-  render() {
-    return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Text>Details Screen</Text>
-      </View>
-    );
-  }
-}
- */
+//defining base url here enables you to write network requests to the server
+//without having to write full url all the time. Instead you should only use the rest
+//of the path(relative path)
+//Eg: /authenticate instead of http://192.168.1.100:3000/api/authenticate
+//The following IP address differs from each other. make sure to check your machine's
+//IP address and replace this with it( IP only. Keep the port number as it is).
+axios.defaults.baseURL = "http://192.168.1.100:3000/api/"
 
 const AppNavigator = createStackNavigator(
   {
-    Home: Login,
-    DisplayOrders: Orders,
+    Home:  {
+      screen: Login,
+      navigationOptions:  {
+        title: '',
+        headerLeft: null
+    }
+    
+    },
+    Orders: {
+      screen: Orders,
+      navigationOptions:  {
+        title: 'Orders',
+        headerLeft: null
+    }
+    },
     OrderDetails:OrderDetails,
+    CheckAuth: CheckAuth
   },
   {
-    initialRouteName: "Home"
+    initialRouteName: "CheckAuth"
   }
 );
 
-//export default createAppContainer(AppNavigator);
+  
 
 const AppContainer = createAppContainer(AppNavigator);
 
